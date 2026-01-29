@@ -4,15 +4,11 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" /> <!-- ビューポートの設定 -->
 		<meta name="format-detection" content="telephone=no" /> <!-- 電話番号の自動リンクを無効化 for iPhone -->
 		<meta charset="UTF-8" />
-		<meta name="author" content="in4labo" />
-		<meta name="description" content="in4labo's GitHub pages" />
-		<meta name="keywords" content="in4labo, GitHub, Pages" />
+		<meta name="author" content="360dig" />
+		<meta name="description" content="360dig" />
+		<meta name="keywords" content="360dig" />
 
-		<meta name="robots" content="noindex">
-		<meta name="robots" content="nofollow">
-		<meta name="robots" content="noarchive">
-
-		<title>in4labo's GitHub Pages</title>
+		<title>360dig</title>
 
 		<!-- ▼ ファビコン＆ホーム画面用アイコン ▼ -->
 		<link rel="shortcut icon" type="image/vnd.microsoft.icon" href="./files/favicon.ico" />
@@ -22,19 +18,51 @@
 
 		<!-- ▼ CSS ▼ -->
 		<link rel="stylesheet" href="./files/reset.css" />						<!-- リセット用 CSS -->
+		<link rel="stylesheet" href="./files/common.css" />						<!-- サイト内共通 CSS -->
+		<link rel="stylesheet" href="./files/pannellum.css" />
+
 		<style>
-			h1 {
-				font-size: 2.5em;
-				margin-bottom: 1em;
+			body {
+				text-align: center;
 			}
 
-			p {
-				margin-bottom: 1em;
+			h1 {
+				margin: 1em 0;
+				font-size: 2em;
+			}
+
+			div {
+				box-sizing: border-box;
 			}
 
 			#container {
-				padding: 50px;
+				padding: 20px;
 			}
+
+			/* パノラマ画像 */
+			#panorama {
+				position: relative;
+				margin: 0 auto;
+			  width: 100%;
+			  height: 75vw;
+			  max-width: 640px;
+			  max-height: 480px;
+			}
+
+			/* 360°アイコン */
+			#panorama::after {
+				display: inline-block;
+				position: absolute;
+				top: 20px;
+				right: 20px;
+				content: "";
+				width:80px;
+				height: 80px;
+				background-image: url('./files/360-icon.webp');
+				background-size: cover;
+				pointer-events: none;
+			}
+
 		</style>
 		<!-- ▲ CSS ▲ -->
 	</head>
@@ -42,16 +70,29 @@
 
 		<!-- ▼ コンテナ ▼ -->
 		<div id="container">
-			<h1>in4labo's GitHub Pages</h1>
-			<p>GitHub の公開テストです。</p>
-			<p>とりあえず公開できたようです。</p>
-			<p>カフェのページはこちら<a href="./cafe/">cafe</a>です。</p>
+
+			<!-- ▼ メイン ▼ -->
+			<div id="main">
+				<h1>pannellum を使った表示</h1>
+				<div id="panorama"><!-- パノラマ画像 --></div>
+			</div>	<!-- /#main -->
+			<!-- ▲ メイン ▲ -->
+
 		</div>	<!-- /#container -->
-		<!-- ▲ container ▲ -->
+		<!-- ▲ コンテナ ▲ -->
 
 		<!-- ▼ jQuery ▼ -->
-		<script src="./files/jquery-1.12.4.min.js"></script>	<!-- jQuery 本体 -->
+		<script src="./files/jquery-1.12.4.min.js"></script>
+		<script src="./files/common.js"></script>
+		<script src="./files/pannellum.js"></script>
+	 
 		<script>
+			pannellum.viewer('panorama', {
+			  "type": "equirectangular",
+			  "panorama": "./files/20260122_133236.jpg",	/* ★★★ パノラマ画像を指定 ★★★ */
+				"autoRotate": -2,
+			  "autoLoad": true
+			});
 		</script>
 		<!-- ▲ jQuery ▲ -->
 	</body>
