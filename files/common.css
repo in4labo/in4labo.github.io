@@ -1,0 +1,39 @@
+﻿@charset "UTF-8";
+
+	body {
+		-webkit-text-size-adjust: 100%;  /* 文字サイズの自動調節を無効にする for iOS */
+		font-family: 'Noto Sans JP',																			/* for windows */
+								 'BIZ UDGothic',																			/* for Windows */
+								 '游ゴシック Medium', 'Yu Gothic Medium',							/* for Windows */
+								 '游ゴシック', 'Yu Gothic',														/* for Windows */
+								 '游ゴシック体', YuGothic,														/* for Mac */
+								 'ヒラギノ角ゴ ProN W3', 'Hiragino Kaku Gothic ProN',	/* for Mac */ 
+								 'メイリオ', Meiryo,																	/* for Windows */
+								 'ＭＳ ゴシック', 'MS Gothic',												/* for Windows */
+								 sans-serif;
+		line-height: 1.5;
+		font-size: 16px;
+		background-color: #fff;
+		color: #333;
+	}
+
+	select, input, textarea, button {
+		font-family: 'Noto Sans JP',																			/* for windows */
+								 'BIZ UDGothic',																			/* for Windows */
+								 '游ゴシック Medium', 'Yu Gothic Medium',							/* for Windows */
+								 '游ゴシック', 'Yu Gothic',														/* for Windows */
+								 '游ゴシック体', YuGothic,														/* for Mac */
+								 'ヒラギノ角ゴ ProN W3', 'Hiragino Kaku Gothic ProN',	/* for Mac */ 
+								 'メイリオ', Meiryo,																	/* for Windows */
+								 'ＭＳ ゴシック', 'MS Gothic',												/* for Windows */
+								 sans-serif;
+		font-size: 1em;
+	}
+
+	a:link,
+	a:visited,
+	a:hover,
+	a:active {
+		color: #df002c;
+		text-decoration: none;
+	}
