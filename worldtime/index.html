@@ -2,34 +2,109 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>米国主要都市時計</title>
+    <title>主要都市の現在時刻</title>
     <style>
         body { font-family: sans-serif; text-align: center; padding: 20px; }
+        h1 { font-size: 1.6em; }
         .clock-box { margin: 20px auto; max-width: 600px; padding: 15px; border: 1px solid #ddd; border-radius: 8px; }
         .city-name { font-size: 1.2em; font-weight: bold; color: #555; }
-        .time-display { font-size: 1.8em; font-weight: bold; color: #333; margin-top: 5px; }
+        .time-display { font-size: 1.4em; font-weight: bold; color: #333; margin-top: 5px; }
+        .gr-1 { background-color: #f0f0f0; }
     </style>
 </head>
 <body>
 
-    <h1>米国主要都市の現在時刻</h1>
+    <h1>主要都市の現在時刻</h1>
 
-    <!-- ニューヨーク -->
+    <!-- 01.東京 -->
     <div class="clock-box">
-        <div class="city-name">ニューヨーク (東部時間)</div>
+        <div class="city-name">東京</div>
+        <div id="tokyo-clock" class="time-display">読み込み中...</div>
+    </div>
+
+    <!-- 02.上海 -->
+    <div class="clock-box">
+        <div class="city-name">上海</div>
+        <div id="shanghai-clock" class="time-display">読み込み中...</div>
+    </div>
+
+    <!-- 03.バンコク -->
+    <div class="clock-box">
+        <div class="city-name">バンコク</div>
+        <div id="bangkok-clock" class="time-display">読み込み中...</div>
+    </div>
+
+    <!-- 04.デリー -->
+    <div class="clock-box">
+        <div class="city-name">デリー</div>
+        <div id="kolkata-clock" class="time-display">読み込み中...</div>
+    </div>
+
+    <!-- 05.ドバイ -->
+    <div class="clock-box">
+        <div class="city-name">ドバイ</div>
+        <div id="dubai-clock" class="time-display">読み込み中...</div>
+    </div>
+
+    <!-- 06.モスクワ -->
+    <div class="clock-box">
+        <div class="city-name">モスクワ</div>
+        <div id="moscow-clock" class="time-display">読み込み中...</div>
+    </div>
+
+    <!-- 07.ストックホルム -->
+    <div class="clock-box gr-1">
+        <div class="city-name">ストックホルム</div>
+        <div id="stockholm-clock" class="time-display">読み込み中...</div>
+    </div>
+
+    <!-- 08.ローマ -->
+
+    <div class="clock-box gr-1">
+        <div class="city-name">ローマ</div>
+        <div id="rome-clock" class="time-display">読み込み中...</div>
+    </div>
+
+    <!-- 09.パリ -->
+    <div class="clock-box gr-1">
+        <div class="city-name">パリ</div>
+        <div id="paris-clock" class="time-display">読み込み中...</div>
+    </div>
+
+    <!-- 11.マドリード -->
+    <div class="clock-box gr-1">
+        <div class="city-name">マドリード</div>
+        <div id="madrid-clock" class="time-display">読み込み中...</div>
+    </div>
+
+    <!-- 10.ロンドン -->
+    <div class="clock-box">
+        <div class="city-name">ロンドン</div>
+        <div id="london-clock" class="time-display">読み込み中...</div>
+    </div>
+
+    <!-- 12.ニューヨーク -->
+    <div class="clock-box">
+        <div class="city-name">ニューヨーク</div>
         <div id="ny-clock" class="time-display">読み込み中...</div>
     </div>
 
-    <!-- シカゴ -->
+    <!-- 13.シカゴ -->
     <div class="clock-box">
-        <div class="city-name">シカゴ (中部時間)</div>
-        <div id="chi-clock" class="time-display">読み込み中...</div>
+        <div class="city-name">シカゴ</div>
+        <div id="chicago-clock" class="time-display">読み込み中...</div>
     </div>
 
-    <!-- ロサンゼルス -->
+    <!-- 14.ロサンゼルス -->
     <div class="clock-box">
-        <div class="city-name">ロサンゼルス (太平洋時間)</div>
+        <div class="city-name">ロサンゼルス</div>
         <div id="la-clock" class="time-display">読み込み中...</div>
+    </div>
+
+    <!-- 15.ホノルル -->
+    <div class="clock-box">
+        <div class="city-name">ホノルル</div>
+        <div id="honolulu-clock" class="time-display">読み込み中...</div>
     </div>
 
     <script>
@@ -42,24 +117,73 @@
                 year: 'numeric',
                 month: '2-digit',
                 day: '2-digit',
-                weekday: 'long',
+                weekday: 'short',
                 hour: '2-digit',
                 minute: '2-digit',
                 second: '2-digit',
                 hour12: true
             };
 
-            // 1. ニューヨーク (America/New_York)
+            // 01.東京
+            options.timeZone = 'Asia/Tokyo';
+            document.getElementById('tokyo-clock').textContent = new Intl.DateTimeFormat('ja-JP', options).format(now);
+
+            // 02.上海
+            options.timeZone = 'Asia/Shanghai';
+            document.getElementById('shanghai-clock').textContent = new Intl.DateTimeFormat('ja-JP', options).format(now);
+
+            // 03.バンコク
+            options.timeZone = 'Asia/Bangkok';
+            document.getElementById('bangkok-clock').textContent = new Intl.DateTimeFormat('ja-JP', options).format(now);
+
+            // 04.デリー
+            options.timeZone = 'Asia/Kolkata';
+            document.getElementById('kolkata-clock').textContent = new Intl.DateTimeFormat('ja-JP', options).format(now);
+
+            // 05.ドバイ
+            options.timeZone = 'Asia/Dubai';
+            document.getElementById('dubai-clock').textContent = new Intl.DateTimeFormat('ja-JP', options).format(now);
+
+            // 06.モスクワ
+            options.timeZone = 'Europe/Moscow';
+            document.getElementById('moscow-clock').textContent = new Intl.DateTimeFormat('ja-JP', options).format(now);
+
+            // 07.ストックホルム
+            options.timeZone = 'Europe/Stockholm';
+            document.getElementById('stockholm-clock').textContent = new Intl.DateTimeFormat('ja-JP', options).format(now);
+
+            // 08.ローマ
+            options.timeZone = 'Europe/Rome';
+            document.getElementById('rome-clock').textContent = new Intl.DateTimeFormat('ja-JP', options).format(now);
+
+            // 09.パリ
+            options.timeZone = 'Europe/Paris';
+            document.getElementById('paris-clock').textContent = new Intl.DateTimeFormat('ja-JP', options).format(now);
+
+            // 11.マドリード
+            options.timeZone = 'Europe/Madrid';
+            document.getElementById('madrid-clock').textContent = new Intl.DateTimeFormat('ja-JP', options).format(now);
+
+            // 10.ロンドン
+            options.timeZone = 'Europe/London';
+            document.getElementById('london-clock').textContent = new Intl.DateTimeFormat('ja-JP', options).format(now);
+
+            // 12.ニューヨーク
             options.timeZone = 'America/New_York';
             document.getElementById('ny-clock').textContent = new Intl.DateTimeFormat('ja-JP', options).format(now);
 
-            // 2. シカゴ (America/Chicago)
+            // 13.シカゴ
             options.timeZone = 'America/Chicago';
-            document.getElementById('chi-clock').textContent = new Intl.DateTimeFormat('ja-JP', options).format(now);
+            document.getElementById('chicago-clock').textContent = new Intl.DateTimeFormat('ja-JP', options).format(now);
 
-            // 3. ロサンゼルス (America/Los_Angeles)
+            // 14.ロサンゼルス
             options.timeZone = 'America/Los_Angeles';
             document.getElementById('la-clock').textContent = new Intl.DateTimeFormat('ja-JP', options).format(now);
+
+            // 15.ホノルル
+            options.timeZone = 'Pacific/Honolulu';
+            document.getElementById('honolulu-clock').textContent = new Intl.DateTimeFormat('ja-JP', options).format(now);
+
         }
 
         // 初回表示
