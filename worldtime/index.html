@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>米国主要都市時計</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 20px; }
+        .clock-box { margin: 20px auto; max-width: 600px; padding: 15px; border: 1px solid #ddd; border-radius: 8px; }
+        .city-name { font-size: 1.2em; font-weight: bold; color: #555; }
+        .time-display { font-size: 1.8em; font-weight: bold; color: #333; margin-top: 5px; }
+    </style>
+</head>
+<body>
+
+    <h1>米国主要都市の現在時刻</h1>
+
+    <!-- ニューヨーク -->
+    <div class="clock-box">
+        <div class="city-name">ニューヨーク (東部時間)</div>
+        <div id="ny-clock" class="time-display">読み込み中...</div>
+    </div>
+
+    <!-- シカゴ -->
+    <div class="clock-box">
+        <div class="city-name">シカゴ (中部時間)</div>
+        <div id="chi-clock" class="time-display">読み込み中...</div>
+    </div>
+
+    <!-- ロサンゼルス -->
+    <div class="clock-box">
+        <div class="city-name">ロサンゼルス (太平洋時間)</div>
+        <div id="la-clock" class="time-display">読み込み中...</div>
+    </div>
+
+    <script>
+        function updateClocks() {
+            const now = new Date();
+
+            // 各都市のオプション設定
+            const options = {
+                timeZone: '', // ここで切り替え
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                weekday: 'long',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true
+            };
+
+            // 1. ニューヨーク (America/New_York)
+            options.timeZone = 'America/New_York';
+            document.getElementById('ny-clock').textContent = new Intl.DateTimeFormat('ja-JP', options).format(now);
+
+            // 2. シカゴ (America/Chicago)
+            options.timeZone = 'America/Chicago';
+            document.getElementById('chi-clock').textContent = new Intl.DateTimeFormat('ja-JP', options).format(now);
+
+            // 3. ロサンゼルス (America/Los_Angeles)
+            options.timeZone = 'America/Los_Angeles';
+            document.getElementById('la-clock').textContent = new Intl.DateTimeFormat('ja-JP', options).format(now);
+        }
+
+        // 初回表示
+        updateClocks();
+
+        // 1 秒ごとに更新
+        setInterval(updateClocks, 1000);
+    </script>
+</body>
+</html>
+<!--
+世界の主要都市に対応する IANA タイムゾーン識別子 の一覧です。 これらを JavaScript の timeZone オプションに指定するだけで、サマータイムも自動的に考慮された正確な現地時刻を取得できます。-->
