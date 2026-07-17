@@ -41,10 +41,10 @@
         <div id="bangkok-clock" class="time-display">読み込み中...</div>
     </div>
 
-    <!-- 04.デリー -->
+    <!-- 04.ダッカ -->
     <div class="clock-box">
-        <div class="city-name">デリー</div>
-        <div id="kolkata-clock" class="time-display">読み込み中...</div>
+        <div class="city-name">ダッカ</div>
+        <div id="dhaka-clock" class="time-display">読み込み中...</div>
     </div>
 
     <!-- 05.ドバイ -->
@@ -143,9 +143,9 @@
             options.timeZone = 'Asia/Bangkok';
             document.getElementById('bangkok-clock').textContent = new Intl.DateTimeFormat('ja-JP', options).format(now);
 
-            // 04.デリー
-            options.timeZone = 'Asia/Kolkata';
-            document.getElementById('kolkata-clock').textContent = new Intl.DateTimeFormat('ja-JP', options).format(now);
+            // 04.ダッカ
+            options.timeZone = 'Asia/Dhaka';
+            document.getElementById('dhaka-clock').textContent = new Intl.DateTimeFormat('ja-JP', options).format(now);
 
             // 05.ドバイ
             options.timeZone = 'Asia/Dubai';
