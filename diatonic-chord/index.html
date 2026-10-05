@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ダイアトニックコード検索ツール</title>
+
+		<link rel="shortcut icon" type="image/vnd.microsoft.icon" href="./files/favicon.ico" />
+		<link rel="icon" type="image/vnd.microsoft.icon" href="./files/favicon.ico"	 />
+		<link rel="apple-touch-icon" href="./files/apple-touch-icon.png" />
+
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+            color: #7f8c8d;
+        }
+        select {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1rem;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            background-color: #fff;
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        select:focus {
+            border-color: #2980b9;
+        }
+        .result-section {
+            margin-top: 30px;
+            border-top: 2px solid #ecf0f1;
+            padding-top: 20px;
+        }
+        .result-title {
+            font-weight: bold;
+            color: #34495e;
+            margin-bottom: 12px;
+            text-align: left;
+            font-size: 1.1rem;
+        }
+        .major-title { color: #2980b9; }
+        .minor-title { color: #e67e22; margin-top: 25px; }
+        .mixo-title { color: #27ae60; margin-top: 25px; }
+
+        .chord-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+            gap: 10px;
+            justify-content: center;
+        }
+        .chord-item {
+            border: 1px solid #d4e6f1;
+            padding: 12px 5px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            white-space: nowrap;
+        }
+        .major-chord {
+            background-color: #e8f4fd;
+            color: #2980b9;
+            border-color: #d4e6f1;
+        }
+        .minor-chord {
+            background-color: #fdf2e9;
+            color: #e67e22;
+            border-color: #fadbd8;
+        }
+        .mixo-chord {
+            background-color: #eafaf1;
+            color: #27ae60;
+            border-color: #d5f5e3;
+        }
+        .degree {
+            display: block;
+            font-size: 0.75rem;
+            color: #7f8c8d;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>ダイアトニックコード検索</h1>
+    
+    <div>
+        <label for="root-select">キー（ルート音）を選択</label>
+        <select id="root-select">
+            <option value="C">C</option>
+            <option value="C#">C#</option>
+            <option value="D">D</option>
+            <option value="Eb">Eb</option>
+            <option value="E">E</option>
+            <option value="F">F</option>
+            <option value="F#">F#</option>
+            <option value="G">G</option>
+            <option value="Ab">Ab</option>
+            <option value="A">A</option>
+            <option value="Bb">Bb</option>
+            <option value="B">B</option>
+        </select>
+    </div>
+
+    <div class="result-section">
+        <!-- メジャースケール -->
+        <div class="result-title major-title">🎵 <span id="major-key">C</span> メジャースケール</div>
+        <div class="chord-list" id="major-output"></div>
+
+        <!-- ナチュラルマイナースケール -->
+        <div class="result-title minor-title">🎵 <span id="minor-key">C</span> ナチュラルマイナースケール</div>
+        <div class="chord-list" id="minor-output"></div>
+
+        <!-- ミクソリディアンスケール -->
+        <div class="result-title mixo-title">🎵 <span id="mixo-key">C</span> ミクソリディアン・スケール</div>
+        <div class="chord-list" id="mixo-output"></div>
+    </div>
+</div>
+
+<script>
+    // 12半音のピッチ定義（シャープ系・フラット系）
+    const sharps = new Array('C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B');
+    const flats  = new Array('C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B');
+    
+    // アルファベットの循環リスト
+    const letters = new Array('C', 'D', 'E', 'F', 'G', 'A', 'B');
+
+    // 各キーの「開始アルファベット」と「シャープ/フラットの基本属性」
+    const keySettings = {
+        'C':  { letter: 'C', useFlats: false },
+        'C#': { letter: 'C', useFlats: false },
+        'D':  { letter: 'D', useFlats: false },
+        'Eb': { letter: 'E', useFlats: true  },
+        'E':  { letter: 'E', useFlats: false },
+        'F':  { letter: 'F', useFlats: true  },
+        'F#': { letter: 'F', useFlats: false },
+        'G':  { letter: 'G', useFlats: false },
+        'Ab': { letter: 'A', useFlats: true  },
+        'A':  { letter: 'A', useFlats: false },
+        'Bb': { letter: 'B', useFlats: true  },
+        'B':  { letter: 'B', useFlats: false }
+    };
+
+    // 各スケールのルート音からの半音数（インターバル）
+    const majorIntervals = new Array(0, 2, 4, 5, 7, 9, 11);
+    const minorIntervals = new Array(0, 2, 3, 5, 7, 8, 10);
+    const mixoIntervals  = new Array(0, 2, 4, 5, 7, 9, 10);
+
+    // コードクオリティ
+    const majorQualities = new Array('', 'm', 'm', '', '', 'm', 'dim');
+    const minorQualities = new Array('m', 'dim', '', 'm', 'm', '', '');
+    const mixoQualities  = new Array('', 'm', 'dim', '', 'm', 'm', '');
+
+    // 度数表示
+    const majorDegrees = new Array('I', 'II', 'III', 'IV', 'V', 'VI', 'VII');
+    const minorDegrees = new Array('Im', 'IIdim', '♭III', 'IVm', 'Vm', '♭VI', '♭VII');
+    const mixoDegrees  = new Array('I', 'IIm', 'IIIdim', 'IV', 'Vm', 'VIm', '♭VII');
+
+    const rootSelect = document.getElementById('root-select');
+    const majorOutput = document.getElementById('major-output');
+    const minorOutput = document.getElementById('minor-output');
+    const mixoOutput = document.getElementById('mixo-output');
+
+    // 特定のピッチと目標のアルファベットから、正しい音名（シャープ/フラット付き）を導き出す関数
+    function getNoteName(pitchIndex, targetLetter, useFlats) {
+        pitchIndex = (pitchIndex + 12) % 12;
+        
+        // まずシャープ系かフラット系かで仮の音名を取得
+        let note = useFlats ? flats[pitchIndex] : sharps[pitchIndex];
+        
+        // もしアルファベットが目標と一致していればそのまま返す
+        if (note.startsWith(targetLetter)) {
+            return note;
+        }
+        
+        // 異名同音の調整（C#キーのE#やB#、F#キーのE#など、アルファベット重複回避のための音楽理論的処理）
+        if (targetLetter === 'E' && pitchIndex === 5) return 'E#';
+        if (targetLetter === 'F' && pitchIndex === 4) return 'E'; 
+        if (targetLetter === 'B' && pitchIndex === 0) return 'B#';
+        if (targetLetter === 'C' && pitchIndex === 11) return 'B';
+        if (targetLetter === 'F' && pitchIndex === 3) return 'Fb';
+        if (targetLetter === 'C' && pitchIndex === 4) return 'Dbb'; // 理論上の極端なケース回避用
+        
+        // シャープ/フラットの表記を反転させてチェック
+        note = useFlats ? sharps[pitchIndex] : flats[pitchIndex];
+        if (note.startsWith(targetLetter)) return note;
+
+        // それでも合わない場合のフォールバック（例: C#時のE#など）
+        if (pitchIndex === 5) return 'E#';
+        if (pitchIndex === 0) return 'B#';
+        
+        return useFlats ? flats[pitchIndex] : sharps[pitchIndex];
+    }
+
+    // スケールごとのコードを生成して画面に出力する共通関数
+    function generateScaleChords(rootKey, intervals, qualities, degrees, className, outputElement) {
+        const config = keySettings[rootKey];
+        
+        // ルート音の絶対的なピッチインデックスを取得
+        let rootPitch = sharps.indexOf(rootKey);
+        if (rootPitch === -1) rootPitch = flats.indexOf(rootKey);
+        
+        const startLetterIdx = letters.indexOf(config.letter);
+
+        for (let i = 0; i < 7; i++) {
+            // 現在の度数のピッチインデックス
+            const currentPitch = (rootPitch + intervals[i]) % 12;
+            // 次に来るべき正しいアルファベット
+            const targetLetter = letters[(startLetterIdx + i) % 7];
+            
+            // 正しい音名を取得
+            const noteName = getNoteName(currentPitch, targetLetter, config.useFlats);
+            const chordName = noteName + qualities[i];
+
+            const chordItem = document.createElement('div');
+            chordItem.className = `chord-item ${className}`;
+            chordItem.innerHTML = `<span class="degree">${degrees[i]}</span>${chordName}`;
+            outputElement.appendChild(chordItem);
+        }
+    }
+
+    function updateChords() {
+        const rootNote = rootSelect.value;
+
+        // キーテキスト更新
+        document.getElementById('major-key').textContent = rootNote;
+        document.getElementById('minor-key').textContent = rootNote;
+        document.getElementById('mixo-key').textContent = rootNote;
+
+        // 表示クリア
+        majorOutput.innerHTML = '';
+        minorOutput.innerHTML = '';
+        mixoOutput.innerHTML = '';
+
+        // 各スケールの生成を実行
+        generateScaleChords(rootNote, majorIntervals, majorQualities, majorDegrees, 'major-chord', majorOutput);
+        generateScaleChords(rootNote, minorIntervals, minorQualities, minorDegrees, 'minor-chord', minorOutput);
+        generateScaleChords(rootNote, mixoIntervals, mixoQualities, mixoDegrees, 'mixo-chord', mixoOutput);
+    }
+
+    rootSelect.addEventListener('change', updateChords);
+    updateChords();
+</script>
+
+</body>
+</html>
